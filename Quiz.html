@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>EduSprint Random Quiz</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #fdeff9, #ec38bc);
+      padding: 40px;
+      text-align: center;
+    }
+    .quiz-box {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      width: 500px;
+      margin: auto;
+    }
+    h2 {
+      color: #cc0f7d;
+    }
+    .option {
+      margin: 10px 0;
+      text-align: left;
+    }
+    button {
+      background-color: #e94f9f;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="quiz-box">
+    <h2 id="question">Loading question...</h2>
+    <div id="options"></div>
+    <button onclick="submitAnswer()">Submit</button>
+    <div id="result" style="margin-top:20px;"></div>
+  </div>
+
+  <script>
+    const allQuestions = [
+      {
+        question: "What is the capital of India?",
+        options: ["Mumbai", "Delhi", "Kolkata", "Chennai"],
+        answer: "Delhi"
+      },
+      {
+        question: "Which planet is known as the Red Planet?",
+        options: ["Earth", "Mars", "Venus", "Saturn"],
+        answer: "Mars"
+      },
+      {
+        question: "HTML stands for?",
+        options: ["Hyper Text Makeup Language", "Hyper Transfer Markup Language", "Hyper Text Markup Language", "Highlevel Text Markup Logic"],
+        answer: "Hyper Text Markup Language"
+      },
+      {
+        question: "What is 9 x 3?",
+        options: ["27", "18", "21", "24"],
+        answer: "27"
+      },
+      {
+        question: "Who wrote the theory of relativity?",
+        options: ["Newton", "Tesla", "Einstein", "Galileo"],
+        answer: "Einstein"
+      },
+      {
+        question: "What is the square root of 144?",
+        options: ["12", "14", "16", "10"],
+        answer: "12"
+      },
+      {
+        question: "CSS is used for?",
+        options: ["Styling web pages", "Scripting", "Database", "Hosting"],
+        answer: "Styling web pages"
+      },
+      {
+        question: "Which of these is a JavaScript framework?",
+        options: ["Laravel", "Django", "React", "Flask"],
+        answer: "React"
+      }
+    ];
+
+    let selectedQuestions = [];
+    let current = 0;
+    let score = 0;
+
+// Pick 5 random questions
+    while (selectedQuestions.length < 5) {
+      const random = allQuestions[Math.floor(Math.random() * allQuestions.length)];
+      if (!selectedQuestions.includes(random)) selectedQuestions.push(random);
+    }
+
+    function loadQuestion() {
+      const q = selectedQuestions[current];
+      document.getElementById("question").innerText = `Q${current+1}: ${q.question}`;
+      const optionsHTML = q.options.map(opt => `
+    <label class="option">
+      <input type="radio" name="answer" value="${opt}"> ${opt}
+    </label>
+      `).join('');
+      document.getElementById("options").innerHTML = optionsHTML;
+      document.getElementById("result").innerText = "";
+    }
+
+    function submitAnswer() {
+      const selected = document.querySelector('input[name="answer"]:checked');
+      if (!selected) {
+        alert("Please select an option.");
+        return;
+      }
+      if (selected.value === selectedQuestions[current].answer) {
+        score++;
+      }
+      current++;
+      if (current < selectedQuestions.length) {
+        loadQuestion();
+      } else {
+        document.getElementById("question").innerText = "Quiz Completed! ";
+        document.getElementById("options").innerHTML = "";
+        document.querySelector("button").style.display = "none";
+        document.getElementById("result").innerText = `You scored ${score} out of ${selectedQuestions.length}!`;
+      }
+    }
+
+    loadQuestion();
+  </script>
+
+</body>
+</html>
